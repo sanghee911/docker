@@ -1,0 +1,12 @@
+.reveal.slides {
+    width: 1280px;
+}
+.reveal ul {
+    font-size: 0.8em;
+}
+.reveal p {
+    font-size: 0.8em;
+}
+.reveal pre code {
+    max-height: 600px;
+}

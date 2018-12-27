@@ -22,7 +22,7 @@ Docker provides tooling and a platform to manage the lifecycle of your container
 - A command line interface (CLI) client (the `docker` command).
 
 
-![docker engine](img\engine-components-flow.png) 
+![docker engine](img/engine-components-flow.png)
 
 
 #### What can I use Docker for?
@@ -97,7 +97,7 @@ $ docker-machine ip
 Docker images have intermediate layers that increase reusability, decrease disk usage, and speed up `docker build` by allowing each step to be cached. These intermediate layers are not shown by default.
 
 
-![](img\blog_optimizing_spring_boot_layers.png)
+![](img/blog_optimizing_spring_boot_layers.png)
 
 
 #### Docker image command
@@ -328,7 +328,7 @@ $ docker exec -it container1 ping -c 3 container2
 ```
 
 
-![bridge network](img\bridge_network.png)
+![bridge network](img/bridge_network.png)
 
 
 #### User-defined bridge network
@@ -358,7 +358,7 @@ $ docker exec -it container1 ping -c 3 container2
 ```
 
 
-![network access](img\network_access.png)
+![network access](img/network_access.png)
 
 
 #### Host network
@@ -407,7 +407,7 @@ Docker provides three types of volume as below.
 - **`tmpfs` mounts** are stored in the host system's memory only, and are never written to the host system's filesystem.
 
 
-![docker volume](img\types-of-mounts.png)
+![docker volume](img/types-of-mounts.png)
 
 
 #### How to use volume

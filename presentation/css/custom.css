@@ -1,13 +1,33 @@
 .reveal.slides {
-    width: 1280px;
+    /*width: 1280px;*/
 }
-.reveal ul {
+.reveal ul, .reveal ol {
     font-size: 0.8em;
 }
 .reveal p {
     font-size: 0.8em;
+    text-align: left;
 }
+
+.reveal pre {
+    box-shadow: none;
+    /*border: 1px solid #cccccc;*/
+}
+
 .reveal pre code {
     max-height: 600px;
-    font-size: 0.9em;
+    font-size: 0.8em;
+    padding-left: 15px;
+}
+
+.reveal section img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border: none;
+    box-shadow: none;
+}
+
+.reveal h4 {
+    text-transform: capitalize;
 }

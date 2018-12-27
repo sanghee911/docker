@@ -1,17 +1,16 @@
 # Docker overview
 
 
-
 #### The Docker platform
 
-Docker provides the ability to package and run an application in a loosely isolated environment called a container. The isolation and security allow you to run many containers simultaneously on a given host. Containers are lightweight because they don’t need the extra load of a hypervisor, but run directly within the host machine’s kernel. This means you can run more containers on a given hardware combination than if you were using virtual machines. You can even run Docker containers within host machines that are actually virtual machines!
+Docker provides the ability to package and run an application in a loosely isolated environment called a container. The isolation and security allow you to run many containers simultaneously on a given host. Containers are lightweight because they don't need the extra load of a hypervisor, but run directly within the host machine's kernel. This means you can run more containers on a given hardware combination than if you were using virtual machines. You can even run Docker containers within host machines that are actually virtual machines!
+
 
 Docker provides tooling and a platform to manage the lifecycle of your containers:
 
 - Develop your application and its supporting components using containers.
 - The container becomes the unit for distributing and testing your application.
-- When you’re ready, deploy your application into your production environment, as a container or an orchestrated service. This works the same whether your production environment is a local data center, a cloud provider, or a hybrid of the two.
-
+- When you're ready, deploy your application into your production environment, as a container or an orchestrated service. This works the same whether your production environment is a local data center, a cloud provider, or a hybrid of the two.
 
 
 #### Docker Engine
@@ -23,14 +22,16 @@ Docker provides tooling and a platform to manage the lifecycle of your container
 - A command line interface (CLI) client (the `docker` command).
 
 
+![docker engine](img\engine-components-flow.png) 
 
-![docker engine](D:\Projects\docker\presentation\img\engine-components-flow.png)
 
 #### What can I use Docker for?
+
 
 **Fast, consistent delivery of your applications**
 
 Docker streamlines the development lifecycle by allowing developers to work in standardized environments using local containers which provide your applications and services. Containers are great for continuous integration and continuous delivery (CI/CD) workflows.
+
 
 Consider the following example scenario:
 
@@ -39,21 +40,23 @@ Consider the following example scenario:
 - When developers find bugs, they can fix them in the development environment and redeploy them to the test environment for testing and validation.
 - When testing is complete, getting the fix to the customer is as simple as pushing the updated image to the production environment.
 
+
 **Responsive deployment and scaling**
 
-Docker’s container-based platform allows for highly portable workloads. Docker containers can run on a developer’s local laptop, on physical or virtual machines in a data center, on cloud providers, or in a mixture of environments.
+Docker's container-based platform allows for highly portable workloads. Docker containers can run on a developer's local laptop, on physical or virtual machines in a data center, on cloud providers, or in a mixture of environments.
 
-Docker’s portability and lightweight nature also make it easy to dynamically manage workloads, scaling up or tearing down applications and services as business needs dictate, in near real time.
+Docker's portability and lightweight nature also make it easy to dynamically manage workloads, scaling up or tearing down applications and services as business needs dictate, in near real time.
+
 
 **Running more workloads on the same hardware**
 
 Docker is lightweight and fast. It provides a viable, cost-effective alternative to hypervisor-based virtual machines, so you can use more of your compute capacity to achieve your business goals. Docker is perfect for high density environments and for small and medium deployments where you need to do more with fewer resources.
 
 
-
 #### Docker Architecture
 
 ![alt docker](img/docker_architecture.png)
+
 
 
 # Docker Machine
@@ -91,10 +94,32 @@ $ docker-machine ip
 # Docker images
 
 
+Docker images have intermediate layers that increase reusability, decrease disk usage, and speed up `docker build` by allowing each step to be cached. These intermediate layers are not shown by default.
+
+
+![](img\blog_optimizing_spring_boot_layers.png)
+
+
+#### Docker image command
+```bash
+# List local images
+$ docker image ls
+
+# Inspect an image
+$ docker image inpect nginx
+
+# Show build history of an image
+$ docker history nginx
+```
+
+
 #### Dockerfile
 ```dockerfile
 # Use cetos:latest base image
 FROM centos
+
+# Update and install a package
+RUN yum update -y && yum install -y net-tools
 
 # Set an environment variable
 ENV DATABASE_IP 192.168.100.100
@@ -117,6 +142,9 @@ ADD http://www.namutech.co.jp/img/product/cocktail.png .
 # Run a bash shell after the container starts
 CMD bash
 ```
+
+
+To prevent building a long Keep the codes that change the least at the top of the Dockerfile and keep the codes that changes the most at the bottom of the Dockerfile.
 
 
 #### How to build docker images
@@ -250,7 +278,8 @@ $ curl https://192.168.99.100:2376/v1.24/images/json \
 
 # Docker Network
 
-Docker has four types of network.
+
+#### Four types of Docker network
 
 - Standalone
   - Default bridge network
@@ -259,12 +288,14 @@ Docker has four types of network.
 - Overlay
 - Macvlan
 
+
 Containers can be connected to multiple networks.
 
-#### Default Networks
 
+#### Default Networks
+When you install docker, the default network is created.
 ```bash
-# docker networkのリスト
+# List docker networks
 $ docker network ls
 NETWORK ID          	NAME	DRIVER
 7fca4eb8c647         	bridge	bridge	# default bridge network
@@ -273,11 +304,12 @@ cf03ee007fb4         	host	host	# shares the host network
 ```
 
 
-
-#### How to use the default bridge network
+#### Default bridge network
 
 The default `bridge` network is present on all Docker hosts. If you do not specify a different network, new containers are automatically connected to the default `bridge` network. The default `bridge` network is not recommended for production.
 
+
+#### How to use default bridge network
 ```bash
 # Run the first container
 $ docker run -itd --name=container1 busybox
@@ -296,15 +328,15 @@ $ docker exec -it container1 ping -c 3 container2
 ```
 
 
-
-![bridge network](D:\Projects\docker\presentation\img\bridge_network.png)
-
+![bridge network](img\bridge_network.png)
 
 
-#### How to use user-defined bridge network
+#### User-defined bridge network
 
 It is recommended to use `user-defined bridge` networks to control which containers can communicate with each other, and also to enable automatic DNS resolution of container names to IP addresses.
 
+
+#### How to use user-defined bridge network
 ```bash
 # Create a new user-defined network
 $ docker network create new-network
@@ -326,15 +358,14 @@ $ docker exec -it container1 ping -c 3 container2
 ```
 
 
-
-![network access](D:\Projects\docker\presentation\img\network_access.png)
-
+![network access](img\network_access.png)
 
 
-#### What is the host network?
-
+#### Host network
 If a container is connected to the host network, it shares host's networking stack.
 
+
+#### How to use host network
 ```bash
 # Run a busybox container connected to the host network
 $ docker run -it --rm --network host busybox
@@ -350,12 +381,12 @@ $ curl localhost
 $ curl <other network interface IP>
 ```
 
- 
 
-#### What is the none network?
-
+#### None network
 If you want to completely disable the networking stack on a container, you can use the `--network none` flag when starting the container. Within the container, only the loopback device is created. It is normally used for running batch jobs.
 
+
+#### How to use none network
 ```bash
 # Run a busybox container with the none network
 $ docker run -it --rm --network none busybox
@@ -368,20 +399,18 @@ $ ip a
 
 # Docker Volume
 
+
 Docker provides three types of volume as below.
 
 - **Volumes** are stored in a part of the host filesystem which is *managed by Docker* (`/var/lib/docker/volumes/` on Linux). Non-Docker processes should not modify this part of the filesystem. Volumes are the best way to persist data in Docker.
 - **Bind mounts** may be stored *anywhere* on the host system. They may even be important system files or directories. Non-Docker processes on the Docker host or a Docker container can modify them at any time.
-- **`tmpfs` mounts** are stored in the host system’s memory only, and are never written to the host system’s filesystem.
+- **`tmpfs` mounts** are stored in the host system's memory only, and are never written to the host system's filesystem.
 
 
-
-![docker volume](D:\Projects\docker\presentation\img\types-of-mounts.png)
-
+![docker volume](img\types-of-mounts.png)
 
 
-#### How to use volumes
-
+#### How to use volume
 ```bash
 # Create a new volume
 $ docker volume create nginx
@@ -402,9 +431,7 @@ $ curl localhost:8001
 ```
 
 
-
 #### How to use bind mount
-
 ```bash
 # Create a new directory on the host machine
 $ mkdir -p /var/www
@@ -420,9 +447,7 @@ $ curl localhost:8002
 ```
 
 
-
 #### How to user tmpfs
-
 ```bash
 # Run a container without any volumes mounted
 $ docker run -d --name no-volume nginx
@@ -453,67 +478,87 @@ $ docker exec -it tmpfs ls -ltr /tmp
 
 # Docker Compose
 
-Compose is a tool for defining and running multi-container Docker applications. With Compose, you use a YAML file to configure your application’s services. Then, with a single command, you create and start all the services from your configuration. 
 
+Compose is a tool for defining and running multi-container Docker applications. With Compose, you use a YAML file to configure your application's services. Then, with a single command, you create and start all the services from your configuration.
 
 
 #### How to use Compose
 
 Using Compose is basically a three-step process:
 
-1. Define your app’s environment with a `Dockerfile` so it can be reproduced anywhere.
+1. Define your app's environment with a `Dockerfile` so it can be reproduced anywhere.
 2. Define the services that make up your app in `docker-compose.yml` so they can be run together in an isolated environment.
 3. Run `docker-compose up` and Compose starts and runs your entire app.
 
 
-
-1. Create a `Dockerfile`.
-
+#### Creating a `Dockerfile`
 ```dockerfile
+# Use python:3 base image
 FROM python:3
+
+# Set an environment variable
 ENV PYTHONUNBUFFERED 1
+
+# Create a project root directory
 RUN mkdir /code
+
+# Cd to the project root directory
 WORKDIR /code
+
+# Copy the local file to the container
 ADD requirements.txt /code/
+
+# Install necessary python package
 RUN pip install -r requirements.txt
+
+# Copy the current directory to the container directory
 ADD . /code/
 ```
 
-2. Create a `requirements.txt`.
 
+#### Creating a `requirements.txt`
 ```python
 Django>=1.8,<2.0
 psycopg2
 ```
 
-3. Create a `docker-compose.yml`.
 
+#### Creating a `docker-compose.yml`
 ```yaml
 version: '3'
 
 services:
+  # Service name can be used like a hostname
   db:
+    # Uses postgres image
     image: postgres
   web:
+    # Build an image with default Dockerfile
     build: .
+    # Runs the command when the container starts
     command: python3 manage.py runserver 0.0.0.0:8000
     volumes:
+    # Mount the current directory over the container's /code directory
     - .:/code
     ports:
+    # Port mapping for the port 8000 on the host to the port 8000 on the container
     - "8000:8000"
     depends_on:
+    # Wait for the db container to start servicing
     - db
 ```
 
-4. Create a Django project
 
+#### Creating a Django project
 ```bash
-$ sudo docker-compose run web django-admin.py startproject composeexample .
+# This command runs the container and creates a new project in the volume
+$ sudo docker-compose run web django-admin.py startproject django_project .
 ```
 
-5. Connect the database
 
+#### Connecting the database
 ```python
+# Modify settings.py
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -525,9 +570,8 @@ DATABASES = {
 }
 ```
 
-6. Run the `docker-compose up` command.
 
+#### Run the `docker-compose up` command
 ```bash
 $ docker-compose up
 ```
-

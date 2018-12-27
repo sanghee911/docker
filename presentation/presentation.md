@@ -55,7 +55,7 @@ Docker is lightweight and fast. It provides a viable, cost-effective alternative
 
 #### Docker Architecture
 
-![alt docker](img/docker_architecture.png)
+![alt docker](img/architecture.svg)
 
 
 
